@@ -1,0 +1,206 @@
+#include <stdio.h>
+#include <stdlib.h>
+int count = 0;
+struct node
+{
+    int data;
+    struct node *next;
+};
+void create(struct node **head, int value);
+void insertNode(struct node **head, int value);
+void deleteNode(struct node **head, int position);
+int searchNode(struct node *head, int value);
+void traverse(struct node *head);
+
+int main()
+{
+    struct node *head = NULL;
+    int choice, value, position;
+    while (1)
+    {
+        printf("\n----- MENU -----\n");
+        printf("1. Create a new node\n");
+        printf("2. Insert a new node\n");
+        printf("3. Delete a node\n");
+        printf("4. Search for a value\n");
+        printf("5. Traverse the linked list\n");
+        printf("6. Exit\n");
+
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice)
+        {
+        case 1:
+            printf("Enter the value: ");
+            scanf("%d", &value);
+            create(&head, value);
+            break;
+
+        case 2:
+            printf("Enter the value: ");
+            scanf("%d", &value);
+            insertNode(&head, value);
+            break;
+
+        case 3:
+            printf("Enter the position to delete: ");
+            scanf("%d", &position);
+            deleteNode(&head, position);
+            break;
+
+        case 4:
+            printf("Enter the value to search: ");
+            scanf("%d", &value);
+            searchNode(head, value);
+            break;
+
+        case 5:
+            traverse(head);
+            break;
+
+        case 6:
+            printf("Exiting...\n");
+            exit(0);
+
+        default:
+            printf("Invalid choice.\n");
+        }
+    }
+
+    return 0;
+}
+
+void create(struct node **head, int value)
+{
+    struct node *newNode = (struct node *)malloc(sizeof(struct node));
+    newNode->data = value;
+    newNode->next = NULL;
+    if (*head == NULL)
+    {
+        *head = newNode;
+    }
+    else
+    {
+        struct node *temp = *head;
+        while (temp->next != NULL)
+            temp = temp->next;
+        temp->next = newNode;
+    }
+    count++;
+    printf("Node created successfully.\n");
+}
+
+void insertNode(struct node **head, int value)
+{
+    int pos, i;
+    printf("Enter the position to insert: ");
+    scanf("%d", &pos);
+
+    if (pos < 0 || pos > count)
+    {
+        printf("Invalid position.\n");
+        return;
+    }
+    struct node *newNode = (struct node *)malloc(sizeof(struct node));
+    newNode->data = value;
+    newNode->next = NULL;
+
+    if(pos == 0)
+    {
+        newNode->next = *head;
+        *head = newNode;
+    }
+    else
+    {
+        struct node *temp = *head;
+        for (i = 0; i < pos - 1; i++)
+        {
+        	temp = temp->next;
+		}
+        newNode->next = temp->next;
+        temp->next = newNode;
+    }
+    count++;
+    printf("Node inserted successfully.\n");
+    printf("After insertion, Linked List : \n");
+    traverse(*head);
+}
+
+void deleteNode(struct node **head, int position)
+{
+    struct node *temp, *prev;
+    int i;
+
+    if (*head == NULL)
+    {
+        printf("Linked List is empty.\n");
+        return;
+    }
+
+    if (position < 0 || position >= count)
+    {
+        printf("Invalid position.\n");
+        return;
+    }
+    if (position == 0)
+    {
+        temp = *head;
+        *head = (*head)->next;
+        free(temp);
+    }
+    else
+    {
+        prev = *head;
+        for (i = 0; i < position - 1; i++)
+		{
+			prev = prev->next;
+		}
+
+        temp = prev->next;
+        prev->next = temp->next;
+        free(temp);
+    }
+    count--;
+    printf("Node deleted successfully \n");
+    printf("After deletion , Linked list : \n");
+    traverse(*head);
+}
+
+int searchNode(struct node *head, int value)
+{
+    int pos = 0;
+    while (head != NULL)
+    {
+        if (head->data == value)
+        {
+            printf("Value found at position %d\n", pos);
+            return pos;
+        }
+
+        head = head->next;
+        pos++;
+    }
+
+    printf("Value not found.\n");
+    return -1;
+}
+
+void traverse(struct node *head)
+{
+    if (head == NULL)
+    {
+        printf("Linked List is empty.\n");
+        return;
+    }
+
+    printf("Linked List: ");
+
+    while (head != NULL)
+    {
+        printf("%d -> ", head->data);
+        head = head->next;
+    }
+
+    printf("NULL\n");
+}
