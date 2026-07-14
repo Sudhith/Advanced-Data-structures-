@@ -1,0 +1,110 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 5
+
+void push(int stack[], int *top, int value);
+void pop(int stack[], int *top);
+void peek(int stack[], int top);
+void display(int stack[], int top);
+
+int main()
+{
+    int stack[MAX];
+    int top = -1;
+    int choice, value;
+
+    while (1)
+    {
+        printf("\n===== STACK MENU =====\n");
+        printf("1. Push\n");
+        printf("2. Pop\n");
+        printf("3. Peek\n");
+        printf("4. Display\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice)
+        {
+            case 1:
+                printf("Enter the value: ");
+                scanf("%d", &value);
+                push(stack, &top, value);
+                break;
+
+            case 2:
+                pop(stack, &top);
+                break;
+
+            case 3:
+                peek(stack, top);
+                break;
+
+            case 4:
+                display(stack, top);
+                break;
+
+            case 5:
+                printf("Exiting...\n");
+                exit(0);
+
+            default:
+                printf("Invalid Choice!\n");
+        }
+    }
+
+    return 0;
+}
+
+void push(int stack[], int *top, int value)
+{
+    if (*top == MAX - 1)
+    {
+        printf("Stack Overflow!\n");
+        return;
+    }
+
+    stack[++(*top)] = value;
+    printf("%d pushed into stack.\n", value);
+}
+
+void pop(int stack[], int *top)
+{
+    if (*top == -1)
+    {
+        printf("Stack Underflow!\n");
+        return;
+    }
+
+    printf("Popped element: %d\n", stack[*top]);
+    (*top)--;
+}
+
+
+void peek(int stack[], int top)
+{
+    if (top == -1)
+    {
+        printf("Stack is Empty!\n");
+        return;
+    }
+
+    printf("Top element: %d\n", stack[top]);
+}
+
+void display(int stack[], int top)
+{
+    int i;
+
+    if (top == -1)
+    {
+        printf("Stack is Empty!\n");
+        return;
+    }
+
+    printf("Stack elements are:\n");
+    for (i = top; i >= 0; i--)
+    {
+        printf("%d\n", stack[i]);
+    }
+}
